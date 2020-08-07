@@ -24,11 +24,11 @@ function! cp#TermWrapper(command) abort
 	exec 'startinsert'
 endfunction
 
-command! -nargs=0 CompileAndRun call cp#TermWrapper(printf('cv %s', expand('%')))
-command! -nargs=1 CompileAndRunWithFile call cp#TermWrapper(printf('cv %s < %s:rin', expand('%'), <args>))
-autocmd FileType cpp nnoremap <F7> :CompileAndRun<CR>
-autocmd FileType cpp nnoremap <leader>cv :CompileAndRun<CR>
-autocmd FileType cpp nnoremap <leader>cc :CompileAndRunWithFile<CR>
+function! cp#RunWithInput(...) abort
+	let l:default_input_name = expand('%:r') . 'in'
+	let l:input_file_name = get(a:, 1, l:default_input_name)
+	call cp#TermWrapper(printf('cv %s < %s', expand('%'), l:input_file_name))
+endfunction
 
 let g:split_term_style = 'horizontal'
 let g:split_term_resize_cmd = 'resize 20'
